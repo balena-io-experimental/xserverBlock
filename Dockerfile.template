@@ -1,0 +1,28 @@
+FROM balenalib/rpi-raspbian
+
+RUN install_packages wget \
+    xserver-xorg-video-fbdev \
+    xserver-xorg \
+    xserver-xorg-legacy \
+    x11-xserver-utils \
+    xterm x11-xserver-utils \
+    xserver-xorg-input-evdev \
+    xterm \ 
+    xinit \
+    libgtk-3-dev \
+    libnss3-dev \
+    libxss1 \
+    libasound2-dev \
+    nano \
+    lsb-release
+
+WORKDIR /usr/src/app
+
+COPY ./base-start.sh ./
+
+ENV UDEV=1
+
+# udev rule to set specific permissions 
+RUN echo 'SUBSYSTEM=="vchiq",GROUP="video",MODE="0660"' > /etc/udev/rules.d/10-vchiq-permissions.rules
+
+
